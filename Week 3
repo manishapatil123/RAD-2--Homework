@@ -1,0 +1,19 @@
+trigger RecipeTrigger on Recipe__c (before insert, before update, after insert, after update) {
+    
+    /***************This Trigger should only be run ONCE**********************************************/
+    if (RecipeTriggerHandler.hasExecuted) { //references a static variable on the handler
+        return;
+    } else {
+        RecipeTriggerHandler.hasExecuted = true; //Set to true so that the trigger will not run again
+    }
+
+    //*********************************************************************************************** */
+    // Instantiate the Handler and set Trigger records
+    RecipeTriggerHandler handler = new RecipeTriggerHandler(Trigger.new);
+    
+        if (Trigger.isInsert && trigger.isBefore) {
+            handler.handleBeforeInsert();
+        }
+        if(Trigger.isUpdate && trigger.isBefore){
+            handler.handleBeforeUpdate();
+        }
